@@ -1,4 +1,4 @@
-import { BufferGeometry, BufferAttribute, DoubleSide, InstancedMesh, RawShaderMaterial, Scene, Vector3, Object3D } from "three";
+import { BufferGeometry, BufferAttribute, DoubleSide, InstancedMesh, RawShaderMaterial, Scene, Vector3, Object3D, ShaderMaterial } from "three";
 import Experience from "../Experience";
 import grassVertexShader from "../shaders/grass-vertex.glsl";
 import grassFragmentShader from "../shaders/grass-fragment.glsl";
@@ -7,7 +7,7 @@ export default class Grass {
     private experience!: Experience;
     private scene!: Scene;
     public mesh!: InstancedMesh;
-    private material!: RawShaderMaterial;
+    private material!: ShaderMaterial;
 
     constructor() {
         this.experience = new Experience();
@@ -33,11 +33,12 @@ export default class Grass {
         geometry.setAttribute("uv", new BufferAttribute(uvs, 2));
         const uFar = false;
 
-        this.material = new RawShaderMaterial({
+        this.material = new ShaderMaterial({
             vertexShader: grassVertexShader,
             fragmentShader: grassFragmentShader,
             side: DoubleSide,
-            transparent: true,
+            transparent: false,
+            alphaTest: 0.5,
             uniforms: {
                 uTime: { value: 0 },
                 uWindFrequency: { value: new Vector3(2.0, 0.5, 2.0) },

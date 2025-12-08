@@ -3,15 +3,24 @@ import Experience from "../Experience";
 import { GLTFLoader, BufferGeometryUtils } from "three/examples/jsm/Addons.js";
 import * as THREE from "three";
 import RAPIER from "@dimforge/rapier3d-compat";
+import Github from "../Github";
 
 export default class Tree {
     private experience!: Experience;
+    private github!: Github
     private scene!: Scene;
-    private TREES = 400;
+    private TREES: number=0;
 
     constructor() {
         this.experience = new Experience();
         this.scene = this.experience.scene;
+        
+        this.github = new Github("sumukhj1219")
+        this.init()
+    }
+
+    private async init() {
+        this.TREES = await this.github.loadContributions();
         this.loadTree();
     }
 
@@ -115,4 +124,5 @@ export default class Tree {
             if (leafInst) this.scene.add(leafInst);
         });
     }
+
 }

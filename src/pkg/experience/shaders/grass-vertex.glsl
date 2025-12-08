@@ -1,17 +1,11 @@
 precision highp float;
 
-uniform mat4 projectionMatrix;
-uniform mat4 modelViewMatrix;
-
-attribute mat4 instanceMatrix;
-attribute vec3 position;
-attribute vec2 uv;
-attribute float aOffset;
-
 uniform float uTime;
 uniform vec3 uWindFrequency;
 uniform float uWindAmplitude;
 uniform vec3 uCameraPosition;
+
+attribute float aOffset;
 
 varying vec2 vUv;
 varying float vFar;
@@ -42,8 +36,9 @@ void main() {
     float t = uTime * 0.8;
 
     float randomPhase = rand(vec2(aOffset, aOffset * 2.3));
+
     float wind =
-          sin((position.x * uWindFrequency.x) + (t + randomPhase)) * 0.5;
+          sin((position.x * uWindFrequency.x) + (t + randomPhase)) * 0.5 +
           sin((position.z * uWindFrequency.y) + (t * 0.7 + randomPhase * 2.0)) * 0.3;
 
     float swayFactor = smoothstep(0.0, 0.55, position.y);
@@ -51,22 +46,20 @@ void main() {
     vec3 animatedPosition = position;
     animatedPosition.x += wind * (0.2 + rand(vec2(aOffset * 2.0, 0.0)) * 0.2) * swayFactor;
 
-
     vec4 worldPos = instanceMatrix * vec4(animatedPosition, 1.0);
+
     float dist = distance(worldPos.xyz, uCameraPosition);
-     vFar = smoothstep(40.0, 100.0, dist); 
+    vFar = smoothstep(40.0, 100.0, dist); 
 
-    float patch = noise(worldPos.xz * 0.08);
-
-    float mask = smoothstep(0.40, 0.75, patch);
+    float patchNoise = noise(worldPos.xz * 0.08);
+    float mask = smoothstep(0.40, 0.75, patchNoise);
 
     animatedPosition *= mask;
 
-    if (patch < 0.40) {
-        gl_Position = vec4(0.0);
+    if (patchNoise < 0.40) {
+        gl_Position = vec4(9999.0);
         return;
     }
-
 
     worldPos = instanceMatrix * vec4(animatedPosition, 1.0);
     gl_Position = projectionMatrix * modelViewMatrix * worldPos;
