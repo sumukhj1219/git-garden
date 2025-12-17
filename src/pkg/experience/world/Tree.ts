@@ -2,8 +2,8 @@ import { Scene, Object3D, MeshToonMaterial, Color, InstancedMesh, Box3 } from "t
 import Experience from "../Experience";
 import { GLTFLoader, BufferGeometryUtils } from "three/examples/jsm/Addons.js";
 import * as THREE from "three";
-import RAPIER from "@dimforge/rapier3d-compat";
 import Github from "../Github";
+import { mapContributionsToTrees } from "@/config/world";
 
 export default class Tree {
     private experience!: Experience;
@@ -20,7 +20,8 @@ export default class Tree {
     }
 
     private async init() {
-        this.TREES = await this.github.loadContributions();
+        const contributions = await this.github.loadContributions();
+        this.TREES = mapContributionsToTrees(contributions)
         this.loadTree();
     }
 
@@ -124,5 +125,5 @@ export default class Tree {
             if (leafInst) this.scene.add(leafInst);
         });
     }
-
+    
 }
