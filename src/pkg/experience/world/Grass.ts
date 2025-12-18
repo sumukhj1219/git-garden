@@ -47,7 +47,7 @@ export default class Grass {
             },
         });
 
-        const count = 2000000;
+        const count = 1500000;
         this.mesh = new InstancedMesh(geometry, this.material, count);
 
         const dummy = new Object3D();

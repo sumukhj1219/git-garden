@@ -7,7 +7,7 @@ import Player from "./Player";
 export default class Leaves {
   private experience!: Experience;
   private scene!: THREE.Scene;
-  private LEAVES_COUNT = 150000;
+  private LEAVES_COUNT = 15000;
   public player!: Player
   private instancedMesh!: THREE.InstancedMesh;
   private leavesData: {
@@ -25,7 +25,7 @@ export default class Leaves {
   }
 
   private fallenLeaves() {
-    const geometry = new THREE.PlaneGeometry(0.125, 0.125);
+    const geometry = new THREE.PlaneGeometry(0.15, 0.15);
 
     const material = new THREE.RawShaderMaterial({
       vertexShader: leavesVertexShader,
@@ -97,7 +97,7 @@ export default class Leaves {
         leaf.position.y += leaf.velocity.y * dt;
         leaf.position.z += leaf.velocity.z * dt;
 
-        leaf.velocity.y -= 0.5 * dt;
+        leaf.velocity.y = 0.5 * dt;
         leaf.velocity.multiplyScalar(0.98);
       }
 

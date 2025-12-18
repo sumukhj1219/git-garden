@@ -15,6 +15,7 @@ import Player from "./Player";
 import Physics from "../Physics";
 import Cycle from "./Cycle";
 import LightPole from "./LightPole";
+import Tiles from "./Tiles";
 
 export default class World {
     private experience!: Experience
@@ -34,6 +35,7 @@ export default class World {
     public physics!: Physics
     public cycle!: Cycle
     public lightPole!: LightPole
+    public tiles!: Tiles
 
     constructor() {
         this.experience = new Experience()
@@ -41,16 +43,6 @@ export default class World {
         this.resources = this.experience.resources
         this.physics = this.experience.physics
         this.resources.startLoading()
-
-        const testMesh = new THREE.Mesh(
-            new THREE.BoxGeometry(1, 1, 1),
-            new THREE.MeshStandardMaterial({
-                metalness: 1,
-                roughness: 0.2
-            })
-        )
-        testMesh.position.set(2, 0, 2)
-        this.scene.add(testMesh)
 
         this.resources.on("ready", () => {
             this.cycle = new Cycle()
@@ -66,6 +58,7 @@ export default class World {
             this.lab = new Lab()
             this.rocks = new Rocks()
             this.lightPole = new LightPole()
+            // this.tiles = new Tiles()
         })
     }
 
